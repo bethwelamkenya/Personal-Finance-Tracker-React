@@ -64,7 +64,7 @@ const HomePage: React.FC<HomeProps> = (
     };
 
     const getAmountColor = (type: string) => {
-        return type.toLowerCase().includes("withdraw") || type.toLowerCase().includes("in") ? '#ef5350' : '#4caf50';
+        return type.toLowerCase().includes("withdraw") || type.toLowerCase().includes("out") ? '#ef5350' : '#4caf50';
     };
     return (
         <Container maxWidth="lg" sx={{py: 4}}>

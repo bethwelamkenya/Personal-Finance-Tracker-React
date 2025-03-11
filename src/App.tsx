@@ -7,7 +7,7 @@ import {createTheme, ThemeProvider} from "@mui/material/styles";
 import Footer from "./global_ui_components/footer";
 import LoginPage from "./pages/login";
 import SignupPage from "./pages/signup";
-import {Route, BrowserRouter as Router, Routes, useNavigate} from "react-router-dom";
+import {Route, BrowserRouter as Router, Routes, useNavigate, useLocation} from "react-router-dom";
 import HomePage from "./pages/home";
 import LandingPage from "./pages/landing";
 import NotFound from "./pages/not_found";
@@ -47,7 +47,8 @@ const createMuiTheme = (theme: Theme) => {
 };
 
 const App = () => {
-    const navigate = useNavigate()
+    const location = useLocation();
+    const navigate = useNavigate();
     const [theme, setTheme] = useState(
         (localStorage.getItem("theme") as Theme) || Theme.LIGHT
     );
@@ -62,47 +63,47 @@ const App = () => {
     const [loadingSavings, setLoadingSavings] = useState(false)
     const [loadingTransactions, setLoadingTransactions] = useState(false)
     useEffect(() => {
-        if (!user) {
-            navigate("/")
-        } else {
-            setLoadingAccounts(true)
-            axios.get(`http://localhost:8080/bank_accounts/email/${user.id}`)
-                .then(response => {
-                    setAccounts(response.data.map((account: any) => (
+        const excludedRoutes = ["/login", "/signup"];
+
+        if (!user && !excludedRoutes.includes(location.pathname)) {
+            navigate("/");
+        } else if (user) {
+            const fetchDataSequentially = async () => {
+                try {
+                    setLoadingAccounts(true);
+                    const accountsResponse = await axios.get(`http://localhost:8080/bank_accounts/email/${user.id}`);
+                    setAccounts(accountsResponse.data.map((account: any) => (
                         BankAccount.fromJson(account)
-                    )));  // Store data in state
+                    )));
                     setLoadingAccounts(false);
-                })
-                .catch(error => {
-                    console.error("Error fetching accounts:", error);
-                    setLoadingAccounts(false);
-                });
-            setLoadingSavings(true)
-            axios.get(`http://localhost:8080/savings_goals/email/${user.id}`)
-                .then(response => {
-                    setSavings(response.data.map((saving: any) => (
+
+                    setLoadingSavings(true);
+                    const savingsResponse = await axios.get(`http://localhost:8080/savings_goals/email/${user.id}`);
+                    setSavings(savingsResponse.data.map((saving: any) => (
                         SavingsGoal.fromJson(saving)
-                    )));  // Store data in state
+                    )));
                     setLoadingSavings(false);
-                })
-                .catch(error => {
-                    console.error("Error fetching savings:", error);
+
+                    setLoadingTransactions(true);
+                    const transactionsResponse = await axios.get(`http://localhost:8080/transactions/email/${user.id}`);
+                    setTransactions(transactionsResponse.data.map((transaction: any) => (
+                        Transaction.fromJson(transaction)
+                    )));
+                    setLoadingTransactions(false);
+
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    setLoadingAccounts(false);
                     setLoadingSavings(false);
-                });
-            setLoadingTransactions(true)
-            axios.get(`http://localhost:8080/transactions/email/${user.id}`)
-                .then(response => {
-                    setTransactions(response.data.map((saving: any) => (
-                        Transaction.fromJson(saving)
-                    )));  // Store data in state
                     setLoadingTransactions(false);
-                })
-                .catch(error => {
-                    console.error("Error fetching transactions:", error);
-                    setLoadingTransactions(false);
-                });
+                }
+            };
+
+            fetchDataSequentially().then(r => {
+
+            });
         }
-    }, [navigate, user]);
+    }, [location.pathname, navigate, user]);
 
     const onUserChanged = (user: User | null) => {
         setUser(user)

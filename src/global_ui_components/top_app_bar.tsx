@@ -61,14 +61,13 @@ const TopAppBar: React.FC<TopAppBarProps> = ({title, user, theme, setTheme, menu
             <AppBar position="sticky" color={"inherit"}>
                 <Toolbar>
                     {/* Menu Button (Optional) */}
-                    <IconButton edge="start" color={'inherit'} aria-label="menu" onClick={() => toggleDrawer(true)}>
-                        {/*<IconButton edge="start" color={'inherit'} aria-label="menu" onClick={handleMenuOpen}>*/}
-                        {/*    <Icon name={"Menu"} size={40}/>*/}
-                        <MenuIcon fontSize={'large'}/>
+                    <IconButton edge="start" color={"primary"} aria-label="menu" onClick={() => toggleDrawer(true)}>
+                        <MenuIcon/>
                     </IconButton>
 
                     {/* Title */}
-                    <Typography variant="h6" sx={{flexGrow: 1}} textAlign={"start"} color={"primary"} onClick={() => navigate("/home")}>
+                    <Typography variant="h6" sx={{flexGrow: 1}} color={"primary"}
+                                onClick={() => navigate("/home")}>
                         {title}
                     </Typography>
 
@@ -87,15 +86,15 @@ const TopAppBar: React.FC<TopAppBarProps> = ({title, user, theme, setTheme, menu
                     </Menu>
 
 
-                    <IconButton color={'inherit'}>
-                        <Home fontSize={'large'}/>
+                    <IconButton color={"primary"}>
+                        <Home/>
                     </IconButton>
-                    <IconButton color={'inherit'}>
-                        <AccountCircle fontSize={'large'}/>
+                    <IconButton color={"primary"}>
+                        <AccountCircle/>
                     </IconButton>
                     {/* Theme Switcher Button */}
-                    <IconButton color={'inherit'} onClick={() => setOpenThemingDialogue(true)}>
-                        <Palette fontSize={'large'}/>
+                    <IconButton color={"primary"} onClick={() => setOpenThemingDialogue(true)}>
+                        <Palette/>
                     </IconButton>
                 </Toolbar>
             </AppBar>
