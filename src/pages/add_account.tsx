@@ -49,7 +49,7 @@ const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated})
             setLoading(false)
             console.error("Error adding bank account:", err);
             setSuccess('')
-            setError(err.message || "Failed to add bank account");
+            setError(err.response.data.error || "Failed to add bank account");
         }
     };
 

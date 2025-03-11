@@ -76,7 +76,7 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
                 setSuccess("Account created successfully! Redirecting...");
                 setTimeout(() => navigate("/home"), 2000);
             } catch (err: any) {
-                setError(err.message || "Signup failed!");
+                setError(err.response.data.error || "Signup failed!");
             }
         }
     };
@@ -118,7 +118,7 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
                 <TextField
                     fullWidth
                     label="Password"
-                    name="password"
+                    name="passwordHash"
                     type="password"
                     variant="outlined"
                     margin="normal"

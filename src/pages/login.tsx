@@ -37,7 +37,7 @@ const LoginPage: React.FC<LoginProps> = ({onUserLoggedIn}) => {
             setTimeout(() => navigate("/home"), 2000);
         } catch (err: any) {
             console.log(err)
-            setError(err.message || "Login failed!");
+            setError(err.response.data.error || "Login failed!");
         }
     };
 

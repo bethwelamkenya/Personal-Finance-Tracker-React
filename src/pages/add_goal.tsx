@@ -52,7 +52,7 @@ const AddSavingsGoal = ({user, accounts, onGoalCreated}: AddSavingsGoalProps) =>
         } catch (err: any) {
             setLoading(false)
             setSuccess('')
-            setError(err.message || "Failed to add savings goal");
+            setError(err.response.data.error || "Failed to add savings goal");
             console.error("Error adding savings goal:", err);
         }
     };

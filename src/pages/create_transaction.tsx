@@ -82,7 +82,7 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
             setLoading(false)
             console.log(err)
             setSuccess('')
-            setError(err.message || "Login failed!");
+            setError(err.response.data.error || "Login failed!");
         }
     };
 
