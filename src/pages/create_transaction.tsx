@@ -15,15 +15,18 @@ import {BankAccount} from "../classes/bank_account";
 import {SavingsGoal} from "../classes/savings_goal";
 import {TransactionType} from "../classes/transaction_type";
 import {User} from "../classes/user";
+import {Transaction} from "../classes/transaction";
+import {Loading} from "../global_ui_components/loading";
 
 // Props interface
 interface Props {
     user: User
     bankAccounts: BankAccount[];
     savingsGoals: SavingsGoal[];
+    onTransactionCreated: () => void
 }
 
-const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals}) => {
+const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onTransactionCreated}) => {
     const types = [
         "DEPOSIT",
         "WITHDRAW",
@@ -34,6 +37,9 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals}) =>
         "TRANSFER_GOAL_OUT",
         "TRANSFER_GOAL_OUT_TO",
     ]
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [sourceType, setSourceType] = useState<"bank" | "savings">("bank");
     const [sourceId, setSourceId] = useState<string>("");
     const [transactionType, setTransactionType] = useState<TransactionType>(
@@ -46,9 +52,12 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals}) =>
 
     const handleSubmit = async () => {
         if (!sourceId || amount <= 0) {
-            alert("Please fill all required fields.");
+            setError("Please fill all required fields.");
             return;
         }
+        setError("");
+        setSuccess("");
+        setLoading(true)
         try {
             const response = await axios.post(
                 `http://localhost:8080/transactions/create/${user.id}`, // Replace userId
@@ -64,9 +73,16 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals}) =>
                     userEmail: user.id, // Ensure userId is correct
                 }
             );
-            console.log(response)
-        } catch (e) {
-            console.log(e)
+            const transaction = Transaction.fromJson(response.data)
+            setSuccess(`Transaction created successfully with id: ${transaction.id}. Redirecting...`);
+            setError('')
+            onTransactionCreated()
+            setLoading(false)
+        } catch (err: any) {
+            setLoading(false)
+            console.log(err)
+            setSuccess('')
+            setError(err.message || "Login failed!");
         }
     };
 
@@ -76,6 +92,9 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals}) =>
                 <Typography variant="h5" gutterBottom>
                     Create Transaction
                 </Typography>
+
+                {error && <Typography color="error">{error}</Typography>}
+                {success && <Typography color="success.main">{success}</Typography>}
 
                 {/* Select Source Type */}
                 <FormControl fullWidth margin="normal">
@@ -159,7 +178,7 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals}) =>
                         onChange={(e) => setTargetUserEmail(e.target.value)}
                     />
                 )}
-
+                {loading ? (<Loading large={false}/>) : null}
                 {/* Submit Button */}
                 <Button fullWidth variant="contained" color="primary" sx={{mt: 3}} onClick={handleSubmit}>
                     Submit Transaction

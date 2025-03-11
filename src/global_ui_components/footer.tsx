@@ -12,25 +12,16 @@ const Footer: React.FC = () => {
                 left: 0,
                 right: 0,
                 bgcolor: 'background.paper',
-                zIndex: (theme) => theme.zIndex.drawer + 1,
                 mt: 'auto',
                 py: 4,
                 borderTop: '1px solid',
                 borderColor: 'divider'
             }}
         >
-        {/*// <Box*/}
-        {/*//     position={"static"}*/}
-        {/*//     color={"inherit"} sx={{*/}
-        {/*//     top: "auto",*/}
-        {/*//     bottom: 0,*/}
-        {/*//     py: 4,*/}
-        {/*//     mt: "auto"*/}
-        {/*// }}>*/}
             <Toolbar>
                 <Grid container spacing={2} justifyContent="center" padding={2}>
                     {/* Quick Links */}
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={4} gap={"10px"}>
                         <Typography variant="h6">Quick Links</Typography>
                         <Link href="#" color="inherit" underline="hover" display="block">Home</Link>
                         <Link href="#" color="inherit" underline="hover" display="block">About</Link>
@@ -39,13 +30,13 @@ const Footer: React.FC = () => {
                     </Grid>
 
                     {/* Contact Information */}
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={4} gap={"10px"}>
                         <Typography variant="h6">Contact Us</Typography>
-                        <Box display="flex" alignItems="center">
+                        <Box display="flex" alignItems="center" justifyContent={"center"}>
                             <Icon name={"Phone"} style={{marginRight: 1}}/>
                             <Typography variant="body2">+123 456 7890</Typography>
                         </Box>
-                        <Box display="flex" alignItems="center">
+                        <Box display="flex" alignItems="center" justifyContent={"center"}>
                             <Icon name={"Email"} style={{marginRight: 1}}/>
                             <Typography variant="body2">support@myapp.com</Typography>
                         </Box>
@@ -54,7 +45,7 @@ const Footer: React.FC = () => {
                     {/* Social Media Links */}
                     <Grid item xs={12} sm={4}>
                         <Typography variant="h6">Follow Us</Typography>
-                        <Box>
+                        <Box gap={"10px"}>
                             <IconButton href="#" color="inherit"><Icon name={"Facebook"}/></IconButton>
                             <IconButton href="#" color="inherit"><Icon name={"Twitter"}/></IconButton>
                             <IconButton href="#" color="inherit"><Icon name={"Instagram"}/></IconButton>
@@ -65,7 +56,8 @@ const Footer: React.FC = () => {
             <Divider/>
             {/* Copyright Section */}
             <Box textAlign="center" padding={1} bgcolor="transparent">
-                <Typography variant="body2">© {new Date().getFullYear()} Personal Finance Tracker. All rights reserved.</Typography>
+                <Typography variant="body2">© {new Date().getFullYear()} Personal Finance Tracker. All rights
+                    reserved.</Typography>
             </Box>
         </Box>
     )

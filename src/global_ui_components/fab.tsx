@@ -12,7 +12,7 @@ export default function FloatingMenu() {
 
     const actions = [
         {icon: <AccountBalanceIcon/>, name: "Add Bank Account", onClick: () => navigate("/add_account")},
-        {icon: <SavingsIcon/>, name: "Add Savings Account", onClick: () => navigate("/add_saving")},
+        {icon: <SavingsIcon/>, name: "Add Savings Goal", onClick: () => navigate("/add_goal")},
         {icon: <AttachMoneyIcon/>, name: "Add Transaction", onClick: () => navigate("/create_transaction")},
     ];
 

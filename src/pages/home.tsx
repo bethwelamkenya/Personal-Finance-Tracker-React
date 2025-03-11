@@ -1,9 +1,7 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
 import {
     Container,
     Typography,
-    Button,
     Box,
     Grid,
     Card,
@@ -11,7 +9,7 @@ import {
     Avatar,
     Divider,
     Chip,
-    LinearProgress, Stack
+    LinearProgress, Stack, IconButton
 } from "@mui/material";
 import {User} from "../classes/user";
 import {BankAccount} from "../classes/bank_account";
@@ -21,7 +19,7 @@ import {
     DateRange,
     Email,
     MonetizationOn,
-    Person,
+    Person, Refresh,
     Savings,
     Schedule, SwapHoriz
 } from "@mui/icons-material";
@@ -37,6 +35,7 @@ interface HomeProps {
     loadingAccounts: boolean
     loadingSavings: boolean
     loadingTransactions: boolean
+    refreshData: () => void
 }
 
 const HomePage: React.FC<HomeProps> = (
@@ -47,19 +46,18 @@ const HomePage: React.FC<HomeProps> = (
         transactions,
         loadingAccounts,
         loadingSavings,
-        loadingTransactions
+        loadingTransactions,
+        refreshData
     }) => {
-    const navigate = useNavigate()
     const getTransactionIcon = (type: string) => {
-        switch (type.toLowerCase()) {
-            case 'deposit':
-                return <ArrowDownward/>;
-            case 'withdraw':
-                return <ArrowUpward/>;
-            case 'transfer':
-                return <SwapHoriz/>;
-            default:
-                return <AccountBalance/>;
+        if (type.toLowerCase().includes('deposit')) {
+            return <ArrowDownward/>;
+        } else if (type.toLowerCase().includes('withdraw')) {
+            return <ArrowUpward/>;
+        } else if (type.toLowerCase().includes('transfer')) {
+            return <SwapHoriz/>;
+        } else {
+            return <AccountBalance/>;
         }
     };
 
@@ -78,6 +76,10 @@ const HomePage: React.FC<HomeProps> = (
             }}>Welcome to BeKa Personal Finance Tracker</Typography>
             <Typography>{user.name}</Typography>
             <Typography>{user.email}</Typography>
+
+            <IconButton onClick={refreshData} color={"primary"} sx={{alignSelf: "start"}}>
+                <Refresh fontSize={"large"}/>
+            </IconButton>
 
             <Typography variant="h4" gutterBottom sx={{
                 fontWeight: 600,
@@ -311,8 +313,6 @@ const HomePage: React.FC<HomeProps> = (
                 <AccountBalance fontSize="large"/>
                 Transaction History
             </Typography>
-
-            <Button onClick={() => navigate("/create_transaction")} variant={"outlined"}>Create Transaction</Button>
 
             {loadingTransactions ? (<Loading/>) : (
                 <Grid container spacing={3}>

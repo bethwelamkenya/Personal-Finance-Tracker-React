@@ -18,6 +18,8 @@ import {SavingsGoal} from "./classes/savings_goal";
 import {Transaction} from "./classes/transaction";
 import TransactionForm from "./pages/create_transaction";
 import FloatingMenu from "./global_ui_components/fab";
+import AddBankAccount from "./pages/add_account";
+import AddSavingsGoal from "./pages/add_goal";
 
 const useMuiTheme = (theme: Theme) => {
     const [muiTheme, setMuiTheme] = useState(createMuiTheme(theme));
@@ -62,15 +64,18 @@ const App = () => {
     const [loadingAccounts, setLoadingAccounts] = useState(false)
     const [loadingSavings, setLoadingSavings] = useState(false)
     const [loadingTransactions, setLoadingTransactions] = useState(false)
+    const [refresh, setRefresh] = useState(true)
+
     useEffect(() => {
         const excludedRoutes = ["/login", "/signup"];
 
         if (!user && !excludedRoutes.includes(location.pathname)) {
             navigate("/");
-        } else if (user) {
+        } else if (user && refresh) {
             const fetchDataSequentially = async () => {
                 try {
-                    setLoadingAccounts(true);
+                    setLoadingAccounts(true)
+                    ;
                     const accountsResponse = await axios.get(`http://localhost:8080/bank_accounts/email/${user.id}`);
                     setAccounts(accountsResponse.data.map((account: any) => (
                         BankAccount.fromJson(account)
@@ -90,23 +95,24 @@ const App = () => {
                         Transaction.fromJson(transaction)
                     )));
                     setLoadingTransactions(false);
-
-                } catch (error) {
+                } catch
+                    (error) {
                     console.error("Error fetching data:", error);
                     setLoadingAccounts(false);
                     setLoadingSavings(false);
                     setLoadingTransactions(false);
                 }
             };
-
-            fetchDataSequentially().then(r => {
-
+            fetchDataSequentially().then(() => {
+                setRefresh(false)
             });
         }
-    }, [location.pathname, navigate, user]);
+    }, [location.pathname, navigate, refresh, user]);
+
 
     const onUserChanged = (user: User | null) => {
         setUser(user)
+        setRefresh(true)
     }
 
     useEffect(() => {
@@ -140,14 +146,34 @@ const App = () => {
                     <Routes>
                         {user ? (
                             <>
-                                <Route path="/home" element={<HomePage user={user} accounts={accounts} savings={savings}
-                                                                       transactions={transactions}
-                                                                       loadingAccounts={loadingAccounts}
-                                                                       loadingSavings={loadingSavings}
-                                                                       loadingTransactions={loadingTransactions}/>}/>
-                                <Route path={"/create_transaction"}
-                                       element={<TransactionForm user={user} bankAccounts={accounts}
-                                                                 savingsGoals={savings}/>}/>
+                                <Route path="/home" element={
+                                    <HomePage user={user} accounts={accounts} savings={savings}
+                                              transactions={transactions}
+                                              loadingAccounts={loadingAccounts}
+                                              loadingSavings={loadingSavings}
+                                              loadingTransactions={loadingTransactions}
+                                              refreshData={() => setRefresh(true)}/>}/>
+                                <Route path={"/create_transaction"} element={
+                                    <TransactionForm user={user} bankAccounts={accounts}
+                                                     savingsGoals={savings}
+                                                     onTransactionCreated={() => {
+                                                         setTimeout(() => navigate("/home"), 2000);
+                                                         setRefresh(true)
+                                                     }}/>}/>
+                                <Route path={"/add_account"} element={
+                                    <AddBankAccount user={user}
+                                                    onAccountCreated={() => {
+                                                        setTimeout(() => navigate("/home"), 2000);
+                                                        setRefresh(true)
+                                                    }}/>
+                                }/>
+                                <Route path={"/add_goal"} element={
+                                    <AddSavingsGoal user={user} accounts={accounts}
+                                    onGoalCreated={() => {
+                                        setTimeout(() => navigate("/home"), 2000);
+                                        setRefresh(true)
+                                    }}/>
+                                }/>
                             </>
                         ) : null}
                         <Route path="/" element={<LandingPage/>}/> {/* New Landing Page */}
