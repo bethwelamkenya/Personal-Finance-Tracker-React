@@ -15,7 +15,6 @@ import {BankAccount} from "../classes/bank_account";
 import {SavingsGoal} from "../classes/savings_goal";
 import {TransactionType} from "../classes/transaction_type";
 import {User} from "../classes/user";
-import {Transaction} from "../classes/transaction";
 
 // Props interface
 interface Props {
@@ -37,7 +36,6 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals}) =>
     ]
     const [sourceType, setSourceType] = useState<"bank" | "savings">("bank");
     const [sourceId, setSourceId] = useState<string>("");
-    const [sourceEmailId, setSourceEmailId] = useState<BankAccount | SavingsGoal>(bankAccounts[0])
     const [transactionType, setTransactionType] = useState<TransactionType>(
         TransactionType.DEPOSIT
     );

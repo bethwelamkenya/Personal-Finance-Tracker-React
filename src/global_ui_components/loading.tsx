@@ -1,7 +1,6 @@
 import {styled} from '@mui/material/styles';
 import {keyframes} from '@emotion/react';
 import React from "react";
-import {StyledComponent} from "@emotion/styled";
 
 const jumpAnimation = keyframes`
     0%, 100% {

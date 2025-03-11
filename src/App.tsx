@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import './styles/App.css';
 import {Theme} from "./classes/theme";
-import {Box, Container} from "@mui/material";
+import {Box} from "@mui/material";
 import TopAppBar from "./global_ui_components/top_app_bar";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import Footer from "./global_ui_components/footer";
 import LoginPage from "./pages/login";
 import SignupPage from "./pages/signup";
-import {Route, BrowserRouter as Router, Routes, useNavigate, useLocation} from "react-router-dom";
+import {Route, BrowserRouter as Router, Routes, useNavigate} from "react-router-dom";
 import HomePage from "./pages/home";
 import LandingPage from "./pages/landing";
 import NotFound from "./pages/not_found";
@@ -48,7 +48,6 @@ const createMuiTheme = (theme: Theme) => {
 
 const App = () => {
     const navigate = useNavigate()
-    const location = useLocation()
     const [theme, setTheme] = useState(
         (localStorage.getItem("theme") as Theme) || Theme.LIGHT
     );
@@ -103,7 +102,7 @@ const App = () => {
                     setLoadingTransactions(false);
                 });
         }
-    }, [user]);
+    }, [navigate, user]);
 
     const onUserChanged = (user: User | null) => {
         setUser(user)

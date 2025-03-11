@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {useNavigate, useLocation} from "react-router-dom";
-import {Box, Typography, CircularProgress} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import {Loading} from "../global_ui_components/loading";
 
 const NotFound = () => {
