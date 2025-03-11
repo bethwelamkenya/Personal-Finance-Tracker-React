@@ -1,0 +1,205 @@
+/* ---------- BASE THEME ---------- */
+body {
+    --text-color: #333;
+    --bg-color: #fff;
+    --primary-color: #8b25eb;       /* Updated (originally #007bff) */
+    --translucent-primary-color: #8b25eb22;
+    /*--primary-color: #2563eb;       !* Updated (originally #007bff) *!*/
+    --secondary-color: #6d28d9;     /* Updated (originally #6c757d) */
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-color: #dee2e6;
+}
+
+/* ---------- DARK THEME ---------- */
+body.dark {
+    --text-color: #fff;
+    --bg-color: #333;
+    --primary-color: #9c3bf6;       /* Updated (originally #007bff) */
+    --translucent-primary-color: #9c3bf622;
+    /*--primary-color: #3b82f6;       !* Updated (originally #007bff) *!*/
+    --secondary-color: #818cf8;     /* Updated (originally #6c757d) */
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-color: #dee2e6;
+}
+
+/* ---------- AMOLED THEME ---------- */
+body.amoled {
+    --text-color: #fff;
+    --bg-color: #000;
+    --primary-color: #6366f1;       /* Updated (originally #007bff) */
+    --translucent-primary-color: #6366f122;       /* Updated (originally #007bff) */
+    --secondary-color: #8b5cf6;     /* Updated (originally #6c757d) */
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-color: #dee2e6;
+}
+
+/* ---------- SOLARIZED THEME ---------- */
+body.solarized {
+    --text-color: #839496;
+    --bg-color: #002b36;
+    --primary-color: #268bd2;
+    --translucent-primary-color: #268bd222;
+    --secondary-color: #2aa198;     /* Updated (originally #6c757d) */
+    --success-color: #859900;
+    --danger-color: #dc3545;
+    --warning-color: #b58900;
+    --info-color: #2aa198;
+    --light-color: #eee8d5;
+    --dark-color: #073642;
+    --border-color: #586e75;
+}
+
+/* ---------- NORD THEME ---------- */
+body.nord {
+    --text-color: #d8dee9;
+    --bg-color: #2e3440;
+    --primary-color: #5e81ac;       /* Updated (originally #81a1c1) */
+    --translucent-primary-color: #5e81ac22;       /* Updated (originally #81a1c1) */
+    --secondary-color: #8fbcbb;     /* Updated (originally #6c757d) */
+    --success-color: #a3be8c;
+    --danger-color: #bf616a;
+    --warning-color: #ebcb8b;
+    --info-color: #88c0d0;
+    --light-color: #e5e9f0;
+    --dark-color: #3b4252;
+    --border-color: #4c566a;
+}
+
+/* ---------- DRACULA THEME ---------- */
+body.dracula {
+    --text-color: #f8f8f2;
+    --bg-color: #282a36;
+    --primary-color: #bd93f9;
+    --translucent-primary-color: #bd93f922;
+    --secondary-color: #6272a4;     /* Updated (originally #6c757d) */
+    --success-color: #50fa7b;
+    --danger-color: #ff5555;
+    --warning-color: #f1fa8c;
+    --info-color: #8be9fd;
+    --light-color: #f8f8f2;
+    --dark-color: #44475a;
+    --border-color: #6272a4;
+}
+
+/* ---------- GRUVBOX THEME ---------- */
+body.gruvbox {
+    --text-color: #ebdbb2;
+    --bg-color: #282828;
+    --primary-color: #83a598;
+    --translucent-primary-color: #83a59822;
+    --secondary-color: #928374;     /* Updated (originally #6c757d) */
+    --success-color: #b8bb26;
+    --danger-color: #fb4934;
+    --warning-color: #fabd2f;
+    --info-color: #8ec07c;
+    --light-color: #fbf1c7;
+    --dark-color: #3c3836;
+    --border-color: #928374;
+}
+
+/* ---------- MATERIAL THEMES ---------- */
+body.material {
+    --text-color: #212121;
+    --bg-color: #fafafa;
+    --primary-color: #2196f3;       /* Updated (originally #00bcd4) */
+    --translucent-primary-color: #2196f322;       /* Updated (originally #00bcd4) */
+    --secondary-color: #9c27b0;     /* Updated (originally #6c757d) */
+    --success-color: #4caf50;
+    --danger-color: #f44336;
+    --warning-color: #ff9800;
+    --info-color: #2196f3;
+    --light-color: #e0e0e0;
+    --dark-color: #424242;
+    --border-color: #bdbdbd;
+}
+
+body.material-dark {
+    --text-color: #fafafa;
+    --bg-color: #212121;
+    --primary-color: #29b6f6;       /* Updated (originally #00bcd4) */
+    --translucent-primary-color: #29b6f622;       /* Updated (originally #00bcd4) */
+    --secondary-color: #ab47bc;     /* Updated (originally #6c757d) */
+    --success-color: #4caf50;
+    --danger-color: #f44336;
+    --warning-color: #ff9800;
+    --info-color: #2196f3;
+    --light-color: #e0e0e0;
+    --dark-color: #424242;
+    --border-color: #bdbdbd;
+}
+
+/* ---------- MONOKAI THEME ---------- */
+body.monokai {
+    --text-color: #f8f8f2;
+    --bg-color: #272822;
+    --primary-color: #66d9ef;
+    --translucent-primary-color: #66d9ef22;
+    --secondary-color: #ae81ff;     /* Updated (originally #6c757d) */
+    --success-color: #a6e22e;
+    --danger-color: #f92672;
+    --warning-color: #e6db74;
+    --info-color: #a1efe4;
+    --light-color: #f8f8f2;
+    --dark-color: #75715e;
+    --border-color: #49483e;
+}
+
+body {
+    text-align: center;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.clickable {
+    cursor: pointer;
+}
