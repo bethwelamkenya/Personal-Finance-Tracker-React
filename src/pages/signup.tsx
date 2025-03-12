@@ -11,9 +11,10 @@ import {Loading} from "../global_ui_components/loading";
 
 interface SignupProps {
     onUserSignUp: (user: User | null) => void
+    server: string
 }
 
-const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
+const SignupPage: React.FC<SignupProps> = ({onUserSignUp, server}) => {
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         name: "",
@@ -69,7 +70,7 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
         if (!Object.values(newErrors).some((error) => error)) {
 
             try {
-                const response = await axios.post("http://localhost:8080/users/signup", {
+                const response = await axios.post(`${server}/users/signup`, {
                     ...formData
                 });
 

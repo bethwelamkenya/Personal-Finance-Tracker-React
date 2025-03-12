@@ -21,9 +21,10 @@ import {useNavigate} from "react-router-dom";
 interface AddBankAccountProps {
     user: User
     onAccountCreated: () => void
+    server: string
 }
 
-const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated}) => {
+const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated, server}) => {
     const navigate = useNavigate()
     const [currency, setCurrency] = useState(CurrencyType.USD.code);
     const [holderName, setHolderName] = useState("");
@@ -46,7 +47,7 @@ const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated})
         setLoading(true)
 
         try {
-            await axios.post(`http://localhost:8080/bank_accounts/${user.id}`, {
+            await axios.post(`${server}/bank_accounts/${user.id}`, {
                 bankName: bankName,
                 accountNumber: accountNumber,
                 holderName: holderName,

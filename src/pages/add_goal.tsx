@@ -13,9 +13,10 @@ interface AddSavingsGoalProps {
     user: User
     accounts: BankAccount[];  // List of account numbers passed as a prop
     onGoalCreated: () => void
+    server: string
 }
 
-const AddSavingsGoal = ({user, accounts, onGoalCreated}: AddSavingsGoalProps) => {
+const AddSavingsGoal = ({user, accounts, onGoalCreated, server}: AddSavingsGoalProps) => {
     const navigate = useNavigate()
     const [goalName, setGoalName] = useState("");
     const [accountNumber, setAccountNumber] = useState(accounts[0].accountNumber);
@@ -38,7 +39,7 @@ const AddSavingsGoal = ({user, accounts, onGoalCreated}: AddSavingsGoalProps) =>
         setLoading(true)
 
         try {
-            await axios.post(`http://localhost:8080/savings_goals/${user.id}`, {
+            await axios.post(`${server}/savings_goals/${user.id}`, {
                 accountNumber,
                 goalName,
                 targetAmount: parseFloat(targetAmount),

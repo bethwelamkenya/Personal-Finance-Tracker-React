@@ -26,9 +26,10 @@ interface Props {
     bankAccounts: BankAccount[];
     savingsGoals: SavingsGoal[];
     onTransactionCreated: () => void
+    server: string
 }
 
-const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onTransactionCreated}) => {
+const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onTransactionCreated, server}) => {
     const types = [
         "DEPOSIT",
         "WITHDRAW",
@@ -63,7 +64,7 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
         setLoading(true)
         try {
             const response = await axios.post(
-                `http://localhost:8080/transactions/create/${user.id}`, // Replace userId
+                `${server}/transactions/create/${user.id}`, // Replace userId
                 {
                     accountNumber: sourceId,
                     type: transactionType,

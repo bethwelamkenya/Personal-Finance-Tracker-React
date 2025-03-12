@@ -50,6 +50,7 @@ const createMuiTheme = (theme: Theme) => {
 };
 
 const App = () => {
+    const server = "https://personalfinancetracker-production-3639.up.railway.app"
     const location = useLocation();
     const navigate = useNavigate();
     const [theme, setTheme] = useState(
@@ -77,21 +78,24 @@ const App = () => {
                 try {
                     setLoadingAccounts(true)
                     ;
-                    const accountsResponse = await axios.get(`http://localhost:8080/bank_accounts/email/${user.id}`);
+                    const accountsResponse = await axios.get(`${server}/bank_accounts/email/${user.id}`);
+                    // const accountsResponse = await axios.get(`http://localhost:8080/bank_accounts/email/${user.id}`);
                     setAccounts(accountsResponse.data.map((account: any) => (
                         BankAccount.fromJson(account)
                     )));
                     setLoadingAccounts(false);
 
                     setLoadingSavings(true);
-                    const savingsResponse = await axios.get(`http://localhost:8080/savings_goals/email/${user.id}`);
+                    const savingsResponse = await axios.get(`${server}/savings_goals/email/${user.id}`);
+                    // const savingsResponse = await axios.get(`http://localhost:8080/savings_goals/email/${user.id}`);
                     setSavings(savingsResponse.data.map((saving: any) => (
                         SavingsGoal.fromJson(saving)
                     )));
                     setLoadingSavings(false);
 
                     setLoadingTransactions(true);
-                    const transactionsResponse = await axios.get(`http://localhost:8080/transactions/email/${user.id}`);
+                    const transactionsResponse = await axios.get(`${server}/transactions/email/${user.id}`);
+                    // const transactionsResponse = await axios.get(`http://localhost:8080/transactions/email/${user.id}`);
                     setTransactions(transactionsResponse.data.map((transaction: any) => (
                         Transaction.fromJson(transaction)
                     )));
@@ -160,20 +164,20 @@ const App = () => {
                                                      onTransactionCreated={() => {
                                                          setTimeout(() => navigate("/home"), 2000);
                                                          setRefresh(true)
-                                                     }}/>}/>
+                                                     }} server={server}/>}/>
                                 <Route path={"/add_account"} element={
                                     <AddBankAccount user={user}
                                                     onAccountCreated={() => {
                                                         setTimeout(() => navigate("/home"), 2000);
                                                         setRefresh(true)
-                                                    }}/>
+                                                    }} server={server}/>
                                 }/>
                                 <Route path={"/add_goal"} element={
                                     <AddSavingsGoal user={user} accounts={accounts}
-                                    onGoalCreated={() => {
-                                        setTimeout(() => navigate("/home"), 2000);
-                                        setRefresh(true)
-                                    }}/>
+                                                    onGoalCreated={() => {
+                                                        setTimeout(() => navigate("/home"), 2000);
+                                                        setRefresh(true)
+                                                    }} server={server}/>
                                 }/>
                                 <Route path={"/bank-accounts/:accountNumber"} element={
                                     <BankAccountDetails user={user} savingsGoals={savings} transactions={transactions}/>
@@ -181,8 +185,8 @@ const App = () => {
                             </>
                         ) : null}
                         <Route path="/" element={<LandingPage/>}/> {/* New Landing Page */}
-                        <Route path="/login" element={<LoginPage onUserLoggedIn={onUserChanged}/>}/>
-                        <Route path="/signup" element={<SignupPage onUserSignUp={onUserChanged}/>}/>
+                        <Route path="/login" element={<LoginPage onUserLoggedIn={onUserChanged} server={server}/>}/>
+                        <Route path="/signup" element={<SignupPage onUserSignUp={onUserChanged} server={server}/>}/>
                         <Route path="*" element={<NotFound/>}/> {/* Redirect unknown routes */}
                     </Routes>
                     <FloatingMenu/>

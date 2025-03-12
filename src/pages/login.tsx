@@ -11,9 +11,10 @@ import {Loading} from "../global_ui_components/loading";
 
 interface LoginProps {
     onUserLoggedIn : (user: User | null) => void
+    server: string
 }
 
-const LoginPage: React.FC<LoginProps> = ({onUserLoggedIn}) => {
+const LoginPage: React.FC<LoginProps> = ({onUserLoggedIn, server}) => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("");
     const [passwordHash, setPasswordHash] = useState("");
@@ -27,7 +28,7 @@ const LoginPage: React.FC<LoginProps> = ({onUserLoggedIn}) => {
         setSuccess("");
         setLoading(true)
         try {
-            const response = await axios.post("http://localhost:8080/users/login", {
+            const response = await axios.post(`${server}/users/login`, {
                 email,
                 passwordHash,
             });
