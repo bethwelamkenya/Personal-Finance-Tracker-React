@@ -26,6 +26,7 @@ import {
 import {SavingsGoal} from "../classes/savings_goal";
 import {Transaction} from "../classes/transaction";
 import {Loading} from "../global_ui_components/loading";
+import {useNavigate} from "react-router-dom";
 
 interface HomeProps {
     user: User
@@ -49,6 +50,7 @@ const HomePage: React.FC<HomeProps> = (
         loadingTransactions,
         refreshData
     }) => {
+    const navigate = useNavigate()
     const getTransactionIcon = (type: string) => {
         if (type.toLowerCase().includes('deposit')) {
             return <ArrowDownward/>;
@@ -94,7 +96,7 @@ const HomePage: React.FC<HomeProps> = (
             </Typography>
             {loadingAccounts ? (
                 <Loading/>
-            ) : (
+            ) : accounts.length === 0 ? <Typography>No Bank Accounts Found</Typography> : (
                 <Grid container spacing={3}>
                     {accounts.map((account) => (
                         <Grid item xs={12} sm={6} md={4} key={account.id}>
@@ -107,7 +109,7 @@ const HomePage: React.FC<HomeProps> = (
                                 '&:hover': {
                                     transform: 'translateY(-4px)'
                                 }
-                            }}>
+                            }} onClick={() => navigate(`/bank-accounts/${account.accountNumber}`, { state: { account } })}>
                                 <CardContent sx={{flexGrow: 1}}>
                                     {/* Bank Header */}
                                     <Box sx={{
@@ -191,7 +193,7 @@ const HomePage: React.FC<HomeProps> = (
 
             {loadingSavings ? (
                 <Loading/>
-            ) : (
+            ) : savings.length === 0 ? <Typography>No Savings Goals Found</Typography> : (
                 <Grid container spacing={3}>
                     {savings.map((goal) => {
                         const progress = (goal.savedAmount / goal.targetAmount) * 100;
@@ -314,7 +316,9 @@ const HomePage: React.FC<HomeProps> = (
                 Transaction History
             </Typography>
 
-            {loadingTransactions ? (<Loading/>) : (
+            {loadingTransactions ? (
+                <Loading/>
+            ) : transactions.length === 0 ? <Typography>No Transactions Found</Typography> : (
                 <Grid container spacing={3}>
                     {transactions.map((transaction) => (
                         <Grid item xs={12} key={transaction.id}>
@@ -407,7 +411,8 @@ const HomePage: React.FC<HomeProps> = (
                 </Grid>
             )}
         </Container>
-    );
+    )
+        ;
 };
 
 export default HomePage;

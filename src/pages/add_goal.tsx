@@ -1,11 +1,13 @@
 import React, {useState} from "react";
 import {
-    TextField, Button, Container, Typography, Box, MenuItem, Select, InputLabel, FormControl
+    TextField, Button, Container, Typography, Box, MenuItem, Select, InputLabel, FormControl, IconButton
 } from "@mui/material";
 import axios from "axios";
 import {User} from "../classes/user";
 import {BankAccount} from "../classes/bank_account";
 import {Loading} from "../global_ui_components/loading";
+import {ArrowBack} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 
 interface AddSavingsGoalProps {
     user: User
@@ -14,6 +16,7 @@ interface AddSavingsGoalProps {
 }
 
 const AddSavingsGoal = ({user, accounts, onGoalCreated}: AddSavingsGoalProps) => {
+    const navigate = useNavigate()
     const [goalName, setGoalName] = useState("");
     const [accountNumber, setAccountNumber] = useState(accounts[0].accountNumber);
     const [targetAmount, setTargetAmount] = useState("");
@@ -59,6 +62,11 @@ const AddSavingsGoal = ({user, accounts, onGoalCreated}: AddSavingsGoalProps) =>
 
     return (
         <Container maxWidth="sm">
+            <Box display="flex" justifyContent="flex-start">
+                <IconButton onClick={() => navigate(-1)}>
+                    <ArrowBack fontSize={"large"}/>
+                </IconButton>
+            </Box>
             <Box sx={{mt: 5, p: 3, border: "1px solid #ddd", borderRadius: "8px", boxShadow: 3}}>
                 <Typography variant="h5" gutterBottom>
                     Add Savings Goal

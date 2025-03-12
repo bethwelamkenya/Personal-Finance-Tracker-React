@@ -20,6 +20,7 @@ import TransactionForm from "./pages/create_transaction";
 import FloatingMenu from "./global_ui_components/fab";
 import AddBankAccount from "./pages/add_account";
 import AddSavingsGoal from "./pages/add_goal";
+import BankAccountDetails from "./pages/account_details";
 
 const useMuiTheme = (theme: Theme) => {
     const [muiTheme, setMuiTheme] = useState(createMuiTheme(theme));
@@ -173,6 +174,9 @@ const App = () => {
                                         setTimeout(() => navigate("/home"), 2000);
                                         setRefresh(true)
                                     }}/>
+                                }/>
+                                <Route path={"/bank-accounts/:accountNumber"} element={
+                                    <BankAccountDetails user={user} savingsGoals={savings} transactions={transactions}/>
                                 }/>
                             </>
                         ) : null}

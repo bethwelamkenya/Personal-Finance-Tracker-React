@@ -8,7 +8,7 @@ import {
     FormControl,
     InputLabel,
     Typography,
-    Box,
+    Box, IconButton,
 } from "@mui/material";
 import axios from "axios";
 import {BankAccount} from "../classes/bank_account";
@@ -17,6 +17,8 @@ import {TransactionType} from "../classes/transaction_type";
 import {User} from "../classes/user";
 import {Transaction} from "../classes/transaction";
 import {Loading} from "../global_ui_components/loading";
+import {ArrowBack} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 
 // Props interface
 interface Props {
@@ -37,6 +39,7 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
         "TRANSFER_GOAL_OUT",
         "TRANSFER_GOAL_OUT_TO",
     ]
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -88,6 +91,11 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
 
     return (
         <Container maxWidth="sm">
+            <Box display="flex" justifyContent="flex-start">
+                <IconButton onClick={() => navigate(-1)}>
+                    <ArrowBack fontSize={"large"}/>
+                </IconButton>
+            </Box>
             <Box sx={{p: 4, mt: 4, boxShadow: 3, borderRadius: 2, bgcolor: "white"}}>
                 <Typography variant="h5" gutterBottom>
                     Create Transaction

@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {ArrowBack} from "@mui/icons-material";
 import axios from "axios";
 import {User} from "../classes/user";
+import {Loading} from "../global_ui_components/loading";
 
 interface SignupProps {
     onUserSignUp: (user: User | null) => void
@@ -30,6 +31,7 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
     });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [loading, setLoading] = useState(false)
 
     // Password validation function
     const validatePassword = (password: string) => {
@@ -63,6 +65,7 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
         setErrors(newErrors);
         setError("");
         setSuccess("");
+        setLoading(true)
         if (!Object.values(newErrors).some((error) => error)) {
 
             try {
@@ -75,7 +78,9 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
                 onUserSignUp(User.fromJson(response.data))
                 setSuccess("Account created successfully! Redirecting...");
                 setTimeout(() => navigate("/home"), 2000);
+                setLoading(false)
             } catch (err: any) {
+                setLoading(false)
                 setError(err.response.data.error || "Signup failed!");
             }
         }
@@ -85,7 +90,7 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
         <Container maxWidth="xs">
             <Box display="flex" justifyContent="flex-start">
                 <IconButton onClick={() => navigate(-1)}>
-                    <ArrowBack/>
+                    <ArrowBack fontSize={"large"}/>
                 </IconButton>
             </Box>
             <Paper elevation={3} sx={{padding: 4, mt: 6, textAlign: "center"}}>
@@ -148,6 +153,7 @@ const SignupPage: React.FC<SignupProps> = ({onUserSignUp}) => {
                 />
                 {errors.termsAccepted && <Alert severity="error">{errors.termsAccepted}</Alert>}
 
+                {loading? <Loading large={false}/> : null}
                 <Button
                     fullWidth
                     variant="contained"

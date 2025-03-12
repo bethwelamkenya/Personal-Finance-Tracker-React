@@ -1,9 +1,22 @@
 import React, {useState} from "react";
-import {TextField, Button, Container, Typography, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
+import {
+    TextField,
+    Button,
+    Container,
+    Typography,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    IconButton
+} from "@mui/material";
 import axios from "axios";
 import {User} from "../classes/user";
 import {CurrencyType} from "../classes/currency_type";
 import {Loading} from "../global_ui_components/loading";
+import {ArrowBack} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 
 interface AddBankAccountProps {
     user: User
@@ -11,7 +24,7 @@ interface AddBankAccountProps {
 }
 
 const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated}) => {
-
+    const navigate = useNavigate()
     const [currency, setCurrency] = useState(CurrencyType.USD.code);
     const [holderName, setHolderName] = useState("");
     const [bankName, setBankName] = useState("");
@@ -55,6 +68,11 @@ const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated})
 
     return (
         <Container maxWidth="sm">
+            <Box display="flex" justifyContent="flex-start">
+                <IconButton onClick={() => navigate(-1)}>
+                    <ArrowBack fontSize={"large"}/>
+                </IconButton>
+            </Box>
             <Box sx={{mt: 5, p: 3, border: "1px solid #ddd", borderRadius: "8px", boxShadow: 3}}>
                 <Typography variant="h5" gutterBottom>
                     Add Bank Account
