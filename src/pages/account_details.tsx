@@ -6,8 +6,6 @@ import {
     Box,
     Tab,
     Tabs,
-    Paper,
-    CircularProgress,
     Grid,
     Card,
     CardContent,
