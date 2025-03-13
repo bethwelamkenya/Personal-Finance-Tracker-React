@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     Container,
     Typography,
@@ -11,7 +11,6 @@ import {
     Chip,
     LinearProgress, Stack, IconButton, Button
 } from "@mui/material";
-import {User} from "../classes/user";
 import {BankAccount} from "../classes/bank_account";
 import {
     AccountBalance, Add, ArrowDownward, ArrowUpward,
@@ -27,9 +26,9 @@ import {SavingsGoal} from "../classes/savings_goal";
 import {Transaction} from "../classes/transaction";
 import {Loading} from "../global_ui_components/loading";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../auth_provider";
 
 interface HomeProps {
-    user: User
     accounts: BankAccount[]
     savings: SavingsGoal[]
     transactions: Transaction[]
@@ -41,7 +40,6 @@ interface HomeProps {
 
 const HomePage: React.FC<HomeProps> = (
     {
-        user,
         accounts,
         savings,
         transactions,
@@ -51,6 +49,13 @@ const HomePage: React.FC<HomeProps> = (
         refreshData
     }) => {
     const navigate = useNavigate()
+    const {user, loading} = useAuth()
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate("/");
+        }
+    }, [loading, user, navigate]);
+
     const getTransactionIcon = (type: string) => {
         if (type.toLowerCase().includes('deposit')) {
             return <ArrowDownward/>;

@@ -17,21 +17,17 @@ import {CurrencyType} from "../classes/currency_type";
 import {Loading} from "../global_ui_components/loading";
 import {ArrowBack} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../auth_provider";
 
-interface AddBankAccountProps {
-    user: User
-    onAccountCreated: () => void
-    server: string
-}
-
-const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated, server}) => {
+const AddBankAccount: React.FC = () => {
     const navigate = useNavigate()
+    const {user, server, setLoading} = useAuth()
     const [currency, setCurrency] = useState(CurrencyType.USD.code);
     const [holderName, setHolderName] = useState("");
     const [bankName, setBankName] = useState("");
     const [accountNumber, setAccountNumber] = useState("");
     const [balance, setBalance] = useState("");
-    const [loading, setLoading] = useState(false)
+    const [loadingPost, setLoadingPost] = useState(false)
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
@@ -44,7 +40,7 @@ const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated, 
         }
         setError("");
         setSuccess("");
-        setLoading(true)
+        setLoadingPost(true)
 
         try {
             await axios.post(`${server}/bank_accounts/${user.id}`, {
@@ -57,10 +53,11 @@ const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated, 
             });
             setSuccess(`Bank account added. Redirecting...`);
             setError('')
-            onAccountCreated(); // Redirect after success
-            setLoading(false)
+            setTimeout(() => navigate("/home"), 2000);
+            setLoading(true)
+            setLoadingPost(false)
         } catch (err: any) {
-            setLoading(false)
+            setLoadingPost(false)
             console.error("Error adding bank account:", err);
             setSuccess('')
             setError(err.response.data.error || "Failed to add bank account");
@@ -125,7 +122,7 @@ const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated, 
                             ))}
                         </Select>
                     </FormControl>
-                    {loading ? (<Loading large={false}/>) : null}
+                    {loadingPost ? (<Loading large={false}/>) : null}
                     <Button type="submit" variant="contained" color="primary" fullWidth sx={{mt: 2}}>
                         Add Account
                     </Button>

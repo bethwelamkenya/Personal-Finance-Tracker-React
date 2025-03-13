@@ -3,26 +3,24 @@ import {
     TextField, Button, Container, Typography, Box, MenuItem, Select, InputLabel, FormControl, IconButton
 } from "@mui/material";
 import axios from "axios";
-import {User} from "../classes/user";
 import {BankAccount} from "../classes/bank_account";
 import {Loading} from "../global_ui_components/loading";
 import {ArrowBack} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../auth_provider";
 
 interface AddSavingsGoalProps {
-    user: User
     accounts: BankAccount[];  // List of account numbers passed as a prop
-    onGoalCreated: () => void
-    server: string
 }
 
-const AddSavingsGoal = ({user, accounts, onGoalCreated, server}: AddSavingsGoalProps) => {
+const AddSavingsGoal = ({accounts}: AddSavingsGoalProps) => {
     const navigate = useNavigate()
+    const {user, setLoading, server} = useAuth()
     const [goalName, setGoalName] = useState("");
     const [accountNumber, setAccountNumber] = useState(accounts[0].accountNumber);
     const [targetAmount, setTargetAmount] = useState("");
     const [currency, setCurrency] = useState("USD");
-    const [loading, setLoading] = useState(false)
+    const [loadingPost, setLoadingPost] = useState(false)
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
@@ -36,7 +34,7 @@ const AddSavingsGoal = ({user, accounts, onGoalCreated, server}: AddSavingsGoalP
 
         setError("");
         setSuccess("");
-        setLoading(true)
+        setLoadingPost(true)
 
         try {
             await axios.post(`${server}/savings_goals/${user.id}`, {
@@ -51,10 +49,12 @@ const AddSavingsGoal = ({user, accounts, onGoalCreated, server}: AddSavingsGoalP
 
             setSuccess(`Savings goal added. Redirecting...`);
             setError('')
-            onGoalCreated(); // Redirect after success
-            setLoading(false)
+
+            setTimeout(() => navigate("/home"), 2000);
+            setLoading(true)
+            setLoadingPost(false)
         } catch (err: any) {
-            setLoading(false)
+            setLoadingPost(false)
             setSuccess('')
             setError(err.response.data.error || "Failed to add savings goal");
             console.error("Error adding savings goal:", err);
@@ -112,7 +112,7 @@ const AddSavingsGoal = ({user, accounts, onGoalCreated, server}: AddSavingsGoalP
                             <MenuItem value="KES">KES</MenuItem>
                         </Select>
                     </FormControl>
-                    {loading ? (<Loading large={false}/>) : null}
+                    {loadingPost ? (<Loading large={false}/>) : null}
                     <Button type="submit" variant="contained" color="primary" fullWidth sx={{mt: 2}}>
                         Add Savings Goal
                     </Button>

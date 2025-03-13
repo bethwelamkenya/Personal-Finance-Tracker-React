@@ -14,22 +14,19 @@ import axios from "axios";
 import {BankAccount} from "../classes/bank_account";
 import {SavingsGoal} from "../classes/savings_goal";
 import {TransactionType} from "../classes/transaction_type";
-import {User} from "../classes/user";
 import {Transaction} from "../classes/transaction";
 import {Loading} from "../global_ui_components/loading";
 import {ArrowBack} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../auth_provider";
 
 // Props interface
 interface Props {
-    user: User
     bankAccounts: BankAccount[];
     savingsGoals: SavingsGoal[];
-    onTransactionCreated: () => void
-    server: string
 }
 
-const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onTransactionCreated, server}) => {
+const TransactionForm: React.FC<Props> = ({bankAccounts, savingsGoals}) => {
     const types = [
         "DEPOSIT",
         "WITHDRAW",
@@ -41,7 +38,8 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
         "TRANSFER_GOAL_OUT_TO",
     ]
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
+    const {user, setLoading, server} = useAuth()
+    const [loadingPost, setLoadingPost] = useState(false)
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [sourceType, setSourceType] = useState<"bank" | "savings">("bank");
@@ -61,7 +59,7 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
         }
         setError("");
         setSuccess("");
-        setLoading(true)
+        setLoadingPost(true)
         try {
             const response = await axios.post(
                 `${server}/transactions/create/${user.id}`, // Replace userId
@@ -80,10 +78,11 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
             const transaction = Transaction.fromJson(response.data)
             setSuccess(`Transaction created successfully with id: ${transaction.id}. Redirecting...`);
             setError('')
-            onTransactionCreated()
-            setLoading(false)
+            setTimeout(() => navigate("/home"), 2000);
+            setLoading(true)
+            setLoadingPost(false)
         } catch (err: any) {
-            setLoading(false)
+            setLoadingPost(false)
             console.log(err)
             setSuccess('')
             setError(err.response.data.error || "Login failed!");
@@ -187,7 +186,7 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
                         onChange={(e) => setTargetUserEmail(e.target.value)}
                     />
                 )}
-                {loading ? (<Loading large={false}/>) : null}
+                {loadingPost ? (<Loading large={false}/>) : null}
                 {/* Submit Button */}
                 <Button fullWidth variant="contained" color="primary" sx={{mt: 3}} onClick={handleSubmit}>
                     Submit Transaction

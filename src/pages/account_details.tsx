@@ -14,16 +14,14 @@ import {
 import {BankAccount} from "../classes/bank_account";
 import {SavingsGoal} from "../classes/savings_goal";
 import {Transaction} from "../classes/transaction";
-import {User} from "../classes/user";
 import {AccountBalance, ArrowBack, AttachMoney, CreditCard, ListAlt, Savings} from "@mui/icons-material";
 
 interface BankAccountDetailsProps {
-    user: User
     savingsGoals: SavingsGoal[]
     transactions: Transaction[]
 }
 
-const BankAccountDetails: React.FC<BankAccountDetailsProps> = ({user, savingsGoals, transactions}) => {
+const BankAccountDetails: React.FC<BankAccountDetailsProps> = ({savingsGoals, transactions}) => {
     const navigate = useNavigate()
     const location = useLocation();
     const [account] = useState<BankAccount | null>(location.state?.account || null);
@@ -52,7 +50,6 @@ const BankAccountDetails: React.FC<BankAccountDetailsProps> = ({user, savingsGoa
             </Box>
             {account ? (
                 <>
-
                     {/* Account Overview */}
                     <Card sx={{mb: 4, borderLeft: `4px solid #2196f3`}}>
                         <CardContent>

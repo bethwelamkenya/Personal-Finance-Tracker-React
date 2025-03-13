@@ -7,7 +7,7 @@ import {createTheme, ThemeProvider} from "@mui/material/styles";
 import Footer from "./global_ui_components/footer";
 import LoginPage from "./pages/login";
 import SignupPage from "./pages/signup";
-import {Route, BrowserRouter as Router, Routes, useNavigate, useLocation} from "react-router-dom";
+import {Route, BrowserRouter as Router, Routes, useNavigate} from "react-router-dom";
 import HomePage from "./pages/home";
 import LandingPage from "./pages/landing";
 import NotFound from "./pages/not_found";
@@ -21,6 +21,7 @@ import FloatingMenu from "./global_ui_components/fab";
 import AddBankAccount from "./pages/add_account";
 import AddSavingsGoal from "./pages/add_goal";
 import BankAccountDetails from "./pages/account_details";
+import {AuthProvider, useAuth} from "./auth_provider";
 
 const useMuiTheme = (theme: Theme) => {
     const [muiTheme, setMuiTheme] = useState(createMuiTheme(theme));
@@ -50,75 +51,64 @@ const createMuiTheme = (theme: Theme) => {
 };
 
 const App = () => {
-    const server = "http://localhost:8080"
-    // const server = "https://personalfinancetracker-production-3639.up.railway.app"
-    const location = useLocation();
     const navigate = useNavigate();
     const [theme, setTheme] = useState(
         (localStorage.getItem("theme") as Theme) || Theme.LIGHT
     );
 
+    const {user, setUser, setLoading, loading, server} = useAuth();
+
     const [muiTheme, setMuiTheme] = useState(useMuiTheme(theme));
-    const storedUser = localStorage.getItem("user")
-    const [user, setUser] = useState(User.fromJson(storedUser ? JSON.parse(storedUser) : ""))
+    // const storedUser = localStorage.getItem("user")
+    // const [user, setUser] = useState(User.fromJson(storedUser ? JSON.parse(storedUser) : ""))
     const [accounts, setAccounts] = useState([])
     const [savings, setSavings] = useState([])
     const [transactions, setTransactions] = useState([])
     const [loadingAccounts, setLoadingAccounts] = useState(false)
     const [loadingSavings, setLoadingSavings] = useState(false)
     const [loadingTransactions, setLoadingTransactions] = useState(false)
-    const [refresh, setRefresh] = useState(true)
 
     useEffect(() => {
-        const excludedRoutes = ["/login", "/signup"];
-
-        if (!user && !excludedRoutes.includes(location.pathname)) {
+        if (!loading && !user) {
             navigate("/");
-        } else if (user && refresh) {
+        } else if (loading && user) {
+
+            setLoadingAccounts(true)
+            setLoadingSavings(true);
+            setLoadingTransactions(true);
             const fetchDataSequentially = async () => {
                 try {
-                    setLoadingAccounts(true)
-                    ;
                     const accountsResponse = await axios.get(`${server}/bank_accounts/email/${user.id}`);
-                    // const accountsResponse = await axios.get(`http://localhost:8080/bank_accounts/email/${user.id}`);
                     setAccounts(accountsResponse.data.map((account: any) => (
                         BankAccount.fromJson(account)
                     )));
-                    setLoadingAccounts(false);
 
-                    setLoadingSavings(true);
                     const savingsResponse = await axios.get(`${server}/savings_goals/email/${user.id}`);
-                    // const savingsResponse = await axios.get(`http://localhost:8080/savings_goals/email/${user.id}`);
                     setSavings(savingsResponse.data.map((saving: any) => (
                         SavingsGoal.fromJson(saving)
                     )));
-                    setLoadingSavings(false);
 
-                    setLoadingTransactions(true);
                     const transactionsResponse = await axios.get(`${server}/transactions/email/${user.id}`);
-                    // const transactionsResponse = await axios.get(`http://localhost:8080/transactions/email/${user.id}`);
                     setTransactions(transactionsResponse.data.map((transaction: any) => (
                         Transaction.fromJson(transaction)
                     )));
-                    setLoadingTransactions(false);
                 } catch
                     (error) {
                     console.error("Error fetching data:", error);
-                    setLoadingAccounts(false);
-                    setLoadingSavings(false);
-                    setLoadingTransactions(false);
                 }
             };
             fetchDataSequentially().then(() => {
-                setRefresh(false)
+                setLoading(false)
+                setLoadingAccounts(false);
+                setLoadingSavings(false);
+                setLoadingTransactions(false);
             });
         }
-    }, [location.pathname, navigate, refresh, user]);
-
+    }, [loading, user, navigate, server, setLoading]);
 
     const onUserChanged = (user: User | null) => {
         setUser(user)
-        setRefresh(true)
+        setLoading(true)
     }
 
     useEffect(() => {
@@ -153,35 +143,22 @@ const App = () => {
                         {user ? (
                             <>
                                 <Route path="/home" element={
-                                    <HomePage user={user} accounts={accounts} savings={savings}
+                                    <HomePage accounts={accounts} savings={savings}
                                               transactions={transactions}
                                               loadingAccounts={loadingAccounts}
                                               loadingSavings={loadingSavings}
                                               loadingTransactions={loadingTransactions}
-                                              refreshData={() => setRefresh(true)}/>}/>
+                                              refreshData={() => setLoading(true)}/>}/>
                                 <Route path={"/create_transaction"} element={
-                                    <TransactionForm user={user} bankAccounts={accounts}
-                                                     savingsGoals={savings}
-                                                     onTransactionCreated={() => {
-                                                         setTimeout(() => navigate("/home"), 2000);
-                                                         setRefresh(true)
-                                                     }} server={server}/>}/>
+                                    <TransactionForm bankAccounts={accounts} savingsGoals={savings}/>}/>
                                 <Route path={"/add_account"} element={
-                                    <AddBankAccount user={user}
-                                                    onAccountCreated={() => {
-                                                        setTimeout(() => navigate("/home"), 2000);
-                                                        setRefresh(true)
-                                                    }} server={server}/>
+                                    <AddBankAccount/>
                                 }/>
                                 <Route path={"/add_goal"} element={
-                                    <AddSavingsGoal user={user} accounts={accounts}
-                                                    onGoalCreated={() => {
-                                                        setTimeout(() => navigate("/home"), 2000);
-                                                        setRefresh(true)
-                                                    }} server={server}/>
+                                    <AddSavingsGoal accounts={accounts}/>
                                 }/>
                                 <Route path={"/bank-accounts/:accountNumber"} element={
-                                    <BankAccountDetails user={user} savingsGoals={savings} transactions={transactions}/>
+                                    <BankAccountDetails savingsGoals={savings} transactions={transactions}/>
                                 }/>
                             </>
                         ) : null}
@@ -202,7 +179,9 @@ const App = () => {
 const AppRouter = () => {
     return (
         <Router>
-            <App/>
+            <AuthProvider>
+                <App/>
+            </AuthProvider>
         </Router>
     )
 }
