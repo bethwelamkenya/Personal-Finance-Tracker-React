@@ -50,7 +50,8 @@ const createMuiTheme = (theme: Theme) => {
 };
 
 const App = () => {
-    const server = "https://personalfinancetracker-production-3639.up.railway.app"
+    const server = "http://localhost:8080"
+    // const server = "https://personalfinancetracker-production-3639.up.railway.app"
     const location = useLocation();
     const navigate = useNavigate();
     const [theme, setTheme] = useState(

@@ -97,7 +97,7 @@ const TransactionForm: React.FC<Props> = ({user, bankAccounts, savingsGoals, onT
                     <ArrowBack fontSize={"large"}/>
                 </IconButton>
             </Box>
-            <Box sx={{p: 4, mt: 4, boxShadow: 3, borderRadius: 2, bgcolor: "white"}}>
+            <Box sx={{mt: 5, p: 3, border: "1px solid var(--border-color)", borderRadius: "8px", boxShadow: 3}}>
                 <Typography variant="h5" gutterBottom>
                     Create Transaction
                 </Typography>

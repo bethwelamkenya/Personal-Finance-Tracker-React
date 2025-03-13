@@ -74,7 +74,7 @@ const AddBankAccount: React.FC<AddBankAccountProps> = ({user, onAccountCreated, 
                     <ArrowBack fontSize={"large"}/>
                 </IconButton>
             </Box>
-            <Box sx={{mt: 5, p: 3, border: "1px solid #ddd", borderRadius: "8px", boxShadow: 3}}>
+            <Box sx={{mt: 5, p: 3, border: "1px solid var(--border-color)", borderRadius: "8px", boxShadow: 3}}>
                 <Typography variant="h5" gutterBottom>
                     Add Bank Account
                 </Typography>

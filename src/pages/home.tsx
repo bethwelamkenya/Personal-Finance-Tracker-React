@@ -9,12 +9,12 @@ import {
     Avatar,
     Divider,
     Chip,
-    LinearProgress, Stack, IconButton
+    LinearProgress, Stack, IconButton, Button
 } from "@mui/material";
 import {User} from "../classes/user";
 import {BankAccount} from "../classes/bank_account";
 import {
-    AccountBalance, ArrowDownward, ArrowUpward,
+    AccountBalance, Add, ArrowDownward, ArrowUpward,
     AttachMoney,
     DateRange,
     Email,
@@ -94,6 +94,9 @@ const HomePage: React.FC<HomeProps> = (
                 <AccountBalance fontSize="large"/>
                 Bank Accounts
             </Typography>
+            <Button variant={"outlined"} onClick={() => navigate("/add_account")} endIcon={<Add/>}>
+                Add Bank Account
+            </Button>
             {loadingAccounts ? (
                 <Loading/>
             ) : accounts.length === 0 ? <Typography>No Bank Accounts Found</Typography> : (
@@ -109,7 +112,7 @@ const HomePage: React.FC<HomeProps> = (
                                 '&:hover': {
                                     transform: 'translateY(-4px)'
                                 }
-                            }} onClick={() => navigate(`/bank-accounts/${account.accountNumber}`, { state: { account } })}>
+                            }} onClick={() => navigate(`/bank-accounts/${account.accountNumber}`, {state: {account}})}>
                                 <CardContent sx={{flexGrow: 1}}>
                                     {/* Bank Header */}
                                     <Box sx={{
@@ -190,6 +193,9 @@ const HomePage: React.FC<HomeProps> = (
                 <Savings fontSize="large"/>
                 Savings Goals
             </Typography>
+            <Button variant={"outlined"} onClick={() => navigate("/add_goal")} endIcon={<Add/>}>
+                Add Savings Goal
+            </Button>
 
             {loadingSavings ? (
                 <Loading/>
@@ -315,6 +321,9 @@ const HomePage: React.FC<HomeProps> = (
                 <AccountBalance fontSize="large"/>
                 Transaction History
             </Typography>
+            <Button variant={"outlined"} onClick={() => navigate("/create_transaction")} endIcon={<Add/>}>
+                Create Transaction
+            </Button>
 
             {loadingTransactions ? (
                 <Loading/>
